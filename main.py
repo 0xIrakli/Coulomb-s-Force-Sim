@@ -5,14 +5,8 @@ import random as r
 from scipy.interpolate import interp1d as map_range
 
 pygame.init()
-fullscreen = False
 
 disp = pygame.display
-if fullscreen:
-    win = disp.set_mode((0, 0), pygame.FULLSCREEN)
-else:
-    win = disp.set_mode((900, 900))    
-draw = pygame.draw
 
 METER = 10000
 K = 9 * (10**9)
@@ -20,6 +14,13 @@ MIN_DISTANCE = 0.01
 Q = 10 * (10**(-9))
 M = 0.01
 PARTICLE_COUNT = 10
+FULLSCREEN = False
+
+if FULLSCREEN:
+    win = disp.set_mode((0, 0), pygame.FULLSCREEN)
+else:
+    win = disp.set_mode((900, 900))    
+draw = pygame.draw
 
 disp.set_caption('MATEMATIKA MID')
 class Vector:
