@@ -8,3 +8,6 @@ edit const variables to change different settings (here are some important ones)
 - ****Q**** default q charge value for each particle.
 - ****M**** mass of each particle
 - ****METER**** how many pixels is one meter in CI units. (will probably need to change ****MIN_DISTANCE**** too)
+
+
+[https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot.jpg]
