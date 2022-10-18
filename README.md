@@ -12,3 +12,6 @@ edit const variables to change different settings (here are some important ones)
 ___
 ## Screenshots
 ![screenshot](https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot.jpg)
+![screenshot1](https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot1.jpg)
+![screenshot2](https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot2.jpg)
+![screenshot3](https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot3.jpg)
