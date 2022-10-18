@@ -15,6 +15,7 @@ Q = 10 * (10**(-9))
 M = 0.01
 PARTICLE_COUNT = 10
 FULLSCREEN = False
+DRAW_LINES = True
 
 if FULLSCREEN:
     win = disp.set_mode((0, 0), pygame.FULLSCREEN)
@@ -63,17 +64,19 @@ class Particle:
     colors = [(255, 51, 51), (51, 255, 51)]
     
     #Random position and sign if parameters not passed.
-    def __init__(self, pos=0, sign=0, q=Q, m=M) -> None:
-        self.pos = Vector.random(200, win.get_width()-200, 200, win.get_height()-200) if pos == 0 else pos
+    def __init__(self, pos=0, sign=0, q=0, m=M) -> None:
+        self.pos = Vector.random(150, win.get_width()-150, 150, win.get_height()-150) if pos == 0 else pos
         self.sign = r.choice([1, -1]) if sign == 0 else sign
-        self.q = abs(q)*self.sign
+        self.q = r.randrange(5, 20)*(10**(-9)) if q == 0 else q
+        self.q = abs(self.q)*self.sign
+        print(self.sign)
         self.m = m
 
     def update(self) -> None:
         self.vel.x += self.acc.x
         self.vel.y += self.acc.y
-        self.vel.x *= 0.98
-        self.vel.y *= 0.98
+        self.vel.x *= 0.91
+        self.vel.y *= 0.91
         self.pos.x += self.vel.x
         self.pos.y += self.vel.y
         
@@ -107,9 +110,8 @@ class Particle:
         return Vector(forcex, forcey)
    
 particles = [
-    Particle() for x in range(PARTICLE_COUNT)
+    Particle(q=Q) for x in range(PARTICLE_COUNT)
 ]
-
 #Textbook example
 #particles = [
 #    Particle(Vector(400, 500), sign=-1, q=20*(10**(-9))),
@@ -136,7 +138,8 @@ while True:
             force1 = Particle.calc_force(p1, p2)
             Particle.apply_force(p1, force1)
 
-            draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(2, round(force1.mag*4000))))
+            if DRAW_LINES:
+                draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(2, round(force1.mag*4000))))
 
     [p.update() for p in particles]
     disp.update()
