@@ -43,14 +43,18 @@ class Vector:
     def distance(v1, v2) -> float:
         f = math.sqrt((Vector.distance_x(v1, v2)**2)+(Vector.distance_y(v1, v2)**2))
         return max(abs(f), MIN_DISTANCE)
+    
+    @staticmethod
+    def random(x1, x2):
+        return Vector(r.randrange(x1, x2), r.randrange(x1, x2))
         
 class Particle:
     acc = Vector(0, 0)
     vel = Vector(0, 0)
     colors = [(255, 51, 51), (51, 255, 51)]
     
-    def __init__(self, pos: Vector, sign=1, q=Q, m=M) -> None:
-        self.pos = pos
+    def __init__(self, pos=0, sign=1, q=Q, m=M) -> None:
+        self.pos = Vector.random(50, 750) if pos == 0 else pos
         self.sign = sign
         self.q = abs(q)*self.sign
         self.m = m
@@ -93,14 +97,14 @@ class Particle:
         return Vector(forcex, forcey)
     
 particles = [
-    Particle(Vector(r.randrange(50, 750), r.randrange(100, 700)), sign=r.choice([1, -1])) for x in range(10)
+    Particle(sign=r.choice([1, -1])) for x in range(10)
 ]
 
 #Textbook example
 #particles = [
 #    Particle(Vector(400, 500), sign=-1, q=20*(10**(-9))),
-#    Particle(Vector(500, 500), sign=1),
-#    Particle(Vector(600, 500), sign=-1),
+#    Particle(Vector(600, 500), sign=1),
+#    Particle(Vector(700, 500), sign=-1),
 #]
 
 clock = pygame.time.Clock()
