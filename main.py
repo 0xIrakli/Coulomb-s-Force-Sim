@@ -1,19 +1,25 @@
 import math
-from numpy import ndarray
+from numpy import full, ndarray
 import pygame
 import random as r
 from scipy.interpolate import interp1d as map_range
 
 pygame.init()
+fullscreen = False
 
 disp = pygame.display
-win = disp.set_mode((1000, 1000))
+if fullscreen:
+    win = disp.set_mode((0, 0), pygame.FULLSCREEN)
+else:
+    win = disp.set_mode((900, 900))    
 draw = pygame.draw
+
 METER = 10000
 K = 9 * (10**9)
 MIN_DISTANCE = 0.01
 Q = 10 * (10**(-9))
 M = 0.01
+PARTICLE_COUNT = 10
 
 disp.set_caption('MATEMATIKA MID')
 class Vector:
@@ -45,25 +51,28 @@ class Vector:
         return max(abs(f), MIN_DISTANCE)
     
     @staticmethod
-    def random(x1, x2):
-        return Vector(r.randrange(x1, x2), r.randrange(x1, x2))
+    def random(x1, x2, x3='X', x4='X'):
+        x3 = x1 if x3 == 'X' else x3
+        x4 = x2 if x4 == 'X' else x4
+        return Vector(r.randrange(x1, x2), r.randrange(x3, x4))
         
 class Particle:
     acc = Vector(0, 0)
     vel = Vector(0, 0)
     colors = [(255, 51, 51), (51, 255, 51)]
     
-    def __init__(self, pos=0, sign=1, q=Q, m=M) -> None:
-        self.pos = Vector.random(50, 750) if pos == 0 else pos
-        self.sign = sign
+    #Random position and sign if parameters not passed.
+    def __init__(self, pos=0, sign=0, q=Q, m=M) -> None:
+        self.pos = Vector.random(200, win.get_width()-200, 200, win.get_height()-200) if pos == 0 else pos
+        self.sign = r.choice([1, -1]) if sign == 0 else sign
         self.q = abs(q)*self.sign
         self.m = m
 
     def update(self) -> None:
         self.vel.x += self.acc.x
         self.vel.y += self.acc.y
-        self.vel.x *= 0.9
-        self.vel.y *= 0.9
+        self.vel.x *= 0.98
+        self.vel.y *= 0.98
         self.pos.x += self.vel.x
         self.pos.y += self.vel.y
         
@@ -95,9 +104,9 @@ class Particle:
             return Vector(-forcex, -forcey)
         
         return Vector(forcex, forcey)
-    
+   
 particles = [
-    Particle(sign=r.choice([1, -1])) for x in range(10)
+    Particle() for x in range(PARTICLE_COUNT)
 ]
 
 #Textbook example
@@ -114,17 +123,20 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                quit()
             
     for i in range(len(particles)):
         for j in range(len(particles)):
             p1 = particles[i]
             p2 = particles[j]
-            
+
             force1 = Particle.calc_force(p1, p2)
             Particle.apply_force(p1, force1)
 
-            draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(3, round(force1.mag*4000))))
-            
+            draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(2, round(force1.mag*4000))))
+
     [p.update() for p in particles]
     disp.update()
     clock.tick(120)
