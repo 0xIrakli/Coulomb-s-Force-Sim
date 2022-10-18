@@ -13,8 +13,8 @@ K = 9 * (10**9)
 MIN_DISTANCE = 0.01
 Q = 10 * (10**(-9))
 M = 0.01
-PARTICLE_COUNT = 10
-FULLSCREEN = False
+PARTICLE_COUNT = 15
+FULLSCREEN = True
 DRAW_LINES = True
 
 if FULLSCREEN:
@@ -75,13 +75,13 @@ class Particle:
     def update(self) -> None:
         self.vel.x += self.acc.x
         self.vel.y += self.acc.y
-        self.vel.x *= 0.91
-        self.vel.y *= 0.91
+        self.vel.x *= 0.95
+        self.vel.y *= 0.95
         self.pos.x += self.vel.x
         self.pos.y += self.vel.y
         
         self.acc = Vector(0, 0)
-        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), 4)
+        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), abs(self.q)*(10**8.8))
     
     @property
     def x(self) -> float:
@@ -110,25 +110,19 @@ class Particle:
         return Vector(forcex, forcey)
    
 particles = [
-    Particle(q=Q) for x in range(PARTICLE_COUNT)
+    Particle() for x in range(PARTICLE_COUNT)
 ]
 #Textbook example
 #particles = [
 #    Particle(Vector(400, 500), sign=-1, q=20*(10**(-9))),
-#    Particle(Vector(600, 500), sign=1),
-#    Particle(Vector(700, 500), sign=-1),
+#    Particle(Vector(600, 500), sign=1, q=Q),
+#    Particle(Vector(700, 500), sign=-1, q=Q),
 #]
 
 clock = pygame.time.Clock()
 
 while True:
     win.fill((51, 51, 51))
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            quit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE:
-                quit()
             
     for i in range(len(particles)):
         for j in range(len(particles)):
@@ -139,8 +133,18 @@ while True:
             Particle.apply_force(p1, force1)
 
             if DRAW_LINES:
-                draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(2, round(force1.mag*4000))))
-
+                draw.line(win, (150, 150, 150), (p1.x, p1.y), (p2.x, p2.y), max(1, min(3, round(force1.mag*4000))))
+    
     [p.update() for p in particles]
     disp.update()
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            quit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                quit()
+            if event.key == pygame.K_SPACE:
+                pygame.image.save(win, "screenshot.jpg")
+    
     clock.tick(120)
