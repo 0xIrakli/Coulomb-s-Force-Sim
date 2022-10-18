@@ -10,4 +10,4 @@ edit const variables to change different settings (here are some important ones)
 - ****METER**** how many pixels is one meter in CI units. (will probably need to change ****MIN_DISTANCE**** too)
 
 
-!(https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot.jpg)
+![screenshot](https://github.com/0xIrakli/Coulombs-Force-Simulation/blob/master/screenshots/screenshot.jpg)
