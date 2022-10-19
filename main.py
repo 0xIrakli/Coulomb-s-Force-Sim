@@ -19,7 +19,7 @@ DRAW_LINES = True
 if FULLSCREEN:
     win = disp.set_mode((0, 0), pygame.FULLSCREEN)
 else:
-    win = disp.set_mode((900, 900))    
+    win = disp.set_mode((900, 900))
 draw = pygame.draw
 disp.set_caption('MATEMATIKA MID')
 
