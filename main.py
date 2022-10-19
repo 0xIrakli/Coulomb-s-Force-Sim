@@ -14,7 +14,6 @@ Q = 10 * (10**(-9))
 M = 0.01
 PARTICLE_COUNT = 20
 FULLSCREEN = False
-DRAW_LINES = True
 
 if FULLSCREEN:
     win = disp.set_mode((0, 0), pygame.FULLSCREEN)
@@ -80,7 +79,7 @@ class Particle:
     colors = [(255, 51, 51), (51, 255, 51)]
     forces = []
     
-    #Random position, sign and q charge if not passed as parameters.
+    #Random position and sign if parameters not passed.
     def __init__(self, pos=0, sign=0, q=0, m=M) -> None:
         self.pos = Vector.random(200, win.get_width()-200, 200, win.get_height()-200) if pos == 0 else pos
         self.pos = self.pos.to_meters()
@@ -103,8 +102,7 @@ class Particle:
         #print('\n'.join(map(str, self.forces)), end='\n__________________________________\n')
         self.forces = []
         self.acc = Vector(0, 0)
-        print(self.pos.to_pixels().x)
-        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], self.pos.to_pixels().tuple, 4)#abs(self.q)*(10**8.8))
+        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), abs(self.q)*(10**8.8))
     
     @property
     def x(self) -> float:
@@ -135,7 +133,7 @@ class Particle:
         return Vector(forcex, forcey)
    
 particles = [
-    Particle(q=Q) for x in range(PARTICLE_COUNT)
+    Particle() for x in range(PARTICLE_COUNT)
 ]
 #Textbook example
 #particles = [
