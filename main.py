@@ -13,7 +13,7 @@ K = 9 * (10**9)
 MIN_DISTANCE = 0.01
 Q = 10 * (10**(-9))
 M = 0.01
-PARTICLE_COUNT = 15
+PARTICLE_COUNT = 50
 FULLSCREEN = True
 DRAW_LINES = True
 
@@ -63,7 +63,7 @@ class Particle:
     vel = Vector(0, 0)
     colors = [(255, 51, 51), (51, 255, 51)]
     
-    #Random position and sign if parameters not passed.
+    #Random position, sign and q charge if not passed as parameters.
     def __init__(self, pos=0, sign=0, q=0, m=M) -> None:
         self.pos = Vector.random(150, win.get_width()-150, 150, win.get_height()-150) if pos == 0 else pos
         self.sign = r.choice([1, -1]) if sign == 0 else sign
@@ -81,7 +81,7 @@ class Particle:
         self.pos.y += self.vel.y
         
         self.acc = Vector(0, 0)
-        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), abs(self.q)*(10**8.8))
+        draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), 6)#abs(self.q)*(10**8.8))
     
     @property
     def x(self) -> float:
@@ -110,7 +110,7 @@ class Particle:
         return Vector(forcex, forcey)
    
 particles = [
-    Particle() for x in range(PARTICLE_COUNT)
+    Particle(q=Q) for x in range(PARTICLE_COUNT)
 ]
 #Textbook example
 #particles = [
