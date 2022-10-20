@@ -8,12 +8,14 @@ disp = pygame.display
 
 METER = 10000
 K = 9 * (10**9)
-MIN_DISTANCE = 0.0015
+MIN_DISTANCE = 0.0018
 Q = 20 * (10**(-9))
 M = 0.5
 PARTICLE_COUNT = 50
 FULLSCREEN = True
-DRAW_LINES = False
+DRAW_LINES = True
+RADIUS_SCALED = False
+R = 4
 
 if FULLSCREEN:
     win = disp.set_mode((0, 0), pygame.FULLSCREEN)
@@ -69,7 +71,7 @@ class Particle:
 
         self.sign = r.choice([1, -1]) if sign == 0 else sign
 
-        self.q = r.randrange(5, 20)*(10**(-9)) if q == 0 else q
+        self.q = r.randrange(1, 30)*(10**(-9)) if q == 0 else q
         self.q = abs(self.q)*self.sign
 
         self.m = M if m == 0 else m
@@ -77,6 +79,10 @@ class Particle:
         self.vel = Vector(0, 0)
         self.acc = Vector(0, 0)
         self.lockedpos = lockedpos
+        if RADIUS_SCALED:
+            self.r = abs(self.q)*(250000000)
+        else:
+            self.r = R
 
     def update(self) -> None:
         if not self.lockedpos:
@@ -90,9 +96,9 @@ class Particle:
             self.pos.y += self.vel.y
 
             self.acc = Vector(0, 0)
-            draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), 4)
+            draw.circle(win, self.colors[0] if self.sign < 0 else self.colors[1], (self.x, self.y), self.r)
             return
-        draw.circle(win, (20, 150, 20), (self.x, self.y), self.m*4)
+        draw.circle(win, (20, 150, 20), (self.x, self.y), self.r)
     
     @property
     def x(self) -> float:
@@ -121,7 +127,7 @@ class Particle:
         return Vector(forcex, forcey)
    
 particles = [
-    Particle(q=Q) for x in range(PARTICLE_COUNT)
+    Particle() for x in range(PARTICLE_COUNT)
 ]
 #Textbook example
 #particles = [
@@ -146,7 +152,7 @@ while True:
             Particle.apply_force(p1, force)
             
             if DRAW_LINES:
-                draw.line(win, (220, 220, 220), (p1.x, p1.y), (p2.x, p2.y), int(min(3, max(1, force.mag*1500))))
+                draw.line(win, (100, 100, 100), (p1.x, p1.y), (p2.x, p2.y), int(min(2, max(1, force.mag*1500))))
     [p.update() for p in particles]
     disp.update()
     
